@@ -30,7 +30,7 @@ public sealed class Token : ValueType<Token> {
 
     #region Constructors & Destructor
 
-    internal Token(string digits) {
+    public Token(string digits) {
         _digits = digits;
     }
 
