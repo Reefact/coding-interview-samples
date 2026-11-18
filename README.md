@@ -1,2 +1,9 @@
 # coding-interview-samples
-Code samples and exercises used as support for technical interviews.
+
+Extraits de code et exercices utilisés comme support d'entretiens techniques.
+
+## Exercices
+
+| Exercice | Thème |
+| --- | --- |
+| [Slugger : le token de fin de slug](domain-modeling/slugger-token/README.md) | Modélisation du domaine, revue de code (C#) |
