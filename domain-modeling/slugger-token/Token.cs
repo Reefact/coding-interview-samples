@@ -1,6 +1,7 @@
 #region Usings declarations
 
 using System.Diagnostics;
+using System.Text;
 
 using Value;
 
@@ -13,41 +14,63 @@ namespace Slugger.Domain;
 ///     neither a term nor a word: nothing in the vocabulary spells it.
 /// </summary>
 /// <remarks>
-///     Which is why it has no way in but <see cref="TokenFactory" />. A term is read from a file
-///     and so can be malformed; a token is produced, so the only thing that can be wrong about one
-///     is the request that drew it - and that is the factory's business, not a refusal a report
-///     would carry.
+///     A token is always valid: it carries at least one character, and every one of them belongs
+///     to the alphabet it was drawn from. <see cref="Draw" /> is the only way in, so the type holds
+///     that on its own rather than trusting whoever built it.
 /// </remarks>
 [ValueObject]
 [DebuggerDisplay("{ToString()}")]
 public sealed class Token : ValueType<Token> {
 
+    #region Static members
+
+    /// <summary>Draws a token of that many characters from the alphabet.</summary>
+    /// <param name="alphabet">What to draw them from.</param>
+    /// <param name="length">How many characters to draw. At least one - a token of none is no token.</param>
+    /// <param name="random">Where the draw comes from.</param>
+    /// <exception cref="ArgumentOutOfRangeException">The length is below one.</exception>
+    /// <remarks>Takes exactly <paramref name="length" /> values from the source.</remarks>
+    public static Token Draw(TokenAlphabet alphabet, int length, IRandomSource random) {
+        ArgumentNullException.ThrowIfNull(alphabet);
+        ArgumentNullException.ThrowIfNull(random);
+        ArgumentOutOfRangeException.ThrowIfLessThan(length, 1);
+
+        StringBuilder drawn = new(length);
+        for (int position = 0; position < length; position++) {
+            drawn.Append(alphabet.Draw(random));
+        }
+
+        return new Token(drawn.ToString());
+    }
+
+    #endregion
+
     #region Fields
 
-    private readonly string _digits;
+    private readonly string _characters;
 
     #endregion
 
     #region Constructors & Destructor
 
-    public Token(string digits) {
-        _digits = digits;
+    private Token(string characters) {
+        _characters = characters;
     }
 
     #endregion
 
     /// <summary>How many characters the token carries, which a length budget counts like any other.</summary>
-    public int Length => _digits.Length;
+    public int Length => _characters.Length;
 
     /// <summary>The token, for a human reading a watch window.</summary>
-    /// <remarks>A debugging aid, and not how the digits leave the type.</remarks>
+    /// <remarks>A debugging aid, and not how the characters leave the type.</remarks>
     public override string ToString() {
-        return _digits;
+        return _characters;
     }
 
     /// <summary>Two tokens spelled the same are the same token, whatever draw produced them.</summary>
     protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality() {
-        yield return _digits;
+        yield return _characters;
     }
 
 }
