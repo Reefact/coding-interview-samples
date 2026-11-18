@@ -7,14 +7,15 @@ using System.Text;
 namespace Slugger.Domain;
 
 /// <summary>
-///     Draws a <see cref="Token" />, or decides that this slug carries none.
+///     Tire un <see cref="Token" />, ou décide que ce slug n'en porte pas.
 /// </summary>
 /// <remarks>
-///     The chance is part of the draw rather than a filter around it, because a token that shows up
-///     rarely is the point: it reproduces docker's collision suffix without implementing collision
-///     detection. How many draws it takes from the source is load-bearing for a scripted test, so
-///     it is fixed here - a certainty and an impossibility both skip the roll, and everything
-///     between rolls once before the digits.
+///     La probabilité fait partie du tirage au lieu d'être un filtre autour, parce que tout
+///     l'intérêt est qu'un token apparaisse rarement : on reproduit ainsi le suffixe de collision
+///     de Docker sans implémenter de détection de collision. Le nombre de valeurs prises dans la
+///     source compte pour les tests scriptés, il est donc fixé ici : une certitude comme une
+///     impossibilité se passent du lancer, et tout ce qui est entre les deux lance une fois avant
+///     de tirer les chiffres.
 /// </remarks>
 public static class TokenFactory {
 
@@ -23,10 +24,10 @@ public static class TokenFactory {
 
     #region Static members
 
-    /// <summary>Draws a token of that many characters, or returns null when the chance says not to.</summary>
-    /// <param name="alphabet">What to draw them from.</param>
-    /// <param name="length">How many characters to draw. At least one - a token of none is no token.</param>
-    /// <param name="random">Where the draw comes from.</param>
+    /// <summary>Tire un token de ce nombre de caractères, ou renvoie null quand la probabilité dit non.</summary>
+    /// <param name="alphabet">L'alphabet dans lequel les tirer.</param>
+    /// <param name="length">Le nombre de caractères à tirer. Au moins un : un token vide n'est pas un token.</param>
+    /// <param name="random">La source du tirage.</param>
     public static Token? Draw(TokenAlphabet alphabet, int length, IRandomSource random) {
         string        digits = DigitsOf(alphabet);
         StringBuilder drawn  = new(length);
@@ -37,10 +38,10 @@ public static class TokenFactory {
         return new Token(drawn.ToString());
     }
 
-    /// <summary>A token that always appears, for a caller that has no chance to apply.</summary>
-    /// <param name="random">Where the draw comes from.</param>
-    /// <param name="length">How many characters to draw.</param>
-    /// <param name="alphabet">What to draw them from.</param>
+    /// <summary>Un token qui apparaît à coup sûr, pour l'appelant qui n'a pas de probabilité à appliquer.</summary>
+    /// <param name="random">La source du tirage.</param>
+    /// <param name="length">Le nombre de caractères à tirer.</param>
+    /// <param name="alphabet">L'alphabet dans lequel les tirer.</param>
     public static Token Draw(IRandomSource random, int length, TokenAlphabet alphabet) {
         return Draw(random, length, alphabet, 100)!;
     }

@@ -1,12 +1,12 @@
 namespace Slugger.Domain;
 
-/// <summary>The characters a token is drawn from.</summary>
+/// <summary>Les caractères parmi lesquels un token est tiré.</summary>
 public enum TokenAlphabet {
 
-    /// <summary>The ten decimal digits, which is what docker's collision suffix uses.</summary>
+    /// <summary>Les dix chiffres décimaux, ceux qu'utilise le suffixe de collision de Docker.</summary>
     Decimal,
 
-    /// <summary>The same ten and the six letters above them, lowercase.</summary>
+    /// <summary>Les dix mêmes, suivis des six premières lettres, en minuscules.</summary>
     Hexadecimal
 
 }

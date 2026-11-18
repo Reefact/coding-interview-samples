@@ -9,14 +9,14 @@ using Value;
 namespace Slugger.Domain;
 
 /// <summary>
-///     The characters a slug ends with, drawn at random rather than taken from a theme. It is
-///     neither a term nor a word: nothing in the vocabulary spells it.
+///     Les caractères qui terminent un slug, tirés au hasard plutôt que pris dans un thème. Ce
+///     n'est ni un terme ni un mot : rien dans le vocabulaire ne l'écrit.
 /// </summary>
 /// <remarks>
-///     Which is why it has no way in but <see cref="TokenFactory" />. A term is read from a file
-///     and so can be malformed; a token is produced, so the only thing that can be wrong about one
-///     is the request that drew it - and that is the factory's business, not a refusal a report
-///     would carry.
+///     C'est pourquoi on ne peut l'obtenir que par <see cref="TokenFactory" />. Un terme est lu
+///     dans un fichier, il peut donc être mal formé ; un token, lui, est produit : la seule chose
+///     qui puisse y être fausse, c'est la demande qui l'a tiré. Et cela regarde la factory : ce
+///     n'est pas un rejet qu'un rapport aurait à signaler.
 /// </remarks>
 [ValueObject]
 [DebuggerDisplay("{ToString()}")]
@@ -36,16 +36,16 @@ public sealed class Token : ValueType<Token> {
 
     #endregion
 
-    /// <summary>How many characters the token carries, which a length budget counts like any other.</summary>
+    /// <summary>Le nombre de caractères du token, qu'un budget de longueur compte comme les autres.</summary>
     public int Length => _digits.Length;
 
-    /// <summary>The token, for a human reading a watch window.</summary>
-    /// <remarks>A debugging aid, and not how the digits leave the type.</remarks>
+    /// <summary>Le token, pour qui l'inspecte dans la fenêtre Espion du débogueur.</summary>
+    /// <remarks>Une aide au débogage, et non la façon dont les chiffres sortent du type.</remarks>
     public override string ToString() {
         return _digits;
     }
 
-    /// <summary>Two tokens spelled the same are the same token, whatever draw produced them.</summary>
+    /// <summary>Deux tokens qui s'écrivent pareil sont le même token, quel que soit le tirage qui les a produits.</summary>
     protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality() {
         yield return _digits;
     }
